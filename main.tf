@@ -38,6 +38,11 @@ resource "google_container_cluster" "main" {
     workload_pool = "${var.project_id}.svc.id.goog"
   }
 
+  ip_allocation_policy {
+    services_secondary_range_name = google_compute_subnetwork.main.secondary_ip_range[0].range_name
+    cluster_secondary_range_name = google_compute_subnetwork.main.secondary_ip_range[1].range_name
+  }
+
   resource_labels = var.cluster_resource_labels
 
   # Disable deletion protection so we can delete the cluster after exercise

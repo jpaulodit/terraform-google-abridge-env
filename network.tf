@@ -27,12 +27,12 @@ resource "google_compute_subnetwork" "main" {
   stack_type = "IPV4_ONLY"
 
   secondary_ip_range {
-    range_name    = "${var.vpc_name}-private-services-range"
+    range_name    = "${var.vpc_name}-main-services-range"
     ip_cidr_range = "10.80.16.0/20" # Services range: IPs for k8s services
   }
 
   secondary_ip_range {
-    range_name    = "${var.vpc_name}-private-pods-range"
+    range_name    = "${var.vpc_name}-main-pods-range"
     ip_cidr_range = "10.80.32.0/19" # Pods range: IPs for pods (larger range)
   }
 
