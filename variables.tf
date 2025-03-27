@@ -8,14 +8,29 @@ variable "vpc_name" {
   type        = string
 }
 
-variable "create_public_subnet" {
-  description = "Whether to create a public subnet"
+variable "subnet_primary_cidr" {
+  description = "The primary CIDR block for the subnet. Eg: 10.80.0.0/20"
+  type        = string
+}
+
+variable "subnet_services_cidr" {
+  description = "The services CIDR block for the subnet. Eg: 10.80.16.0/20"
+  type        = string
+}
+
+variable "subnet_pods_cidr" {
+  description = "The pods CIDR block for the subnet. Eg: 10.80.32.0/19"
+  type        = string
+}
+
+variable "private_ip_google_access" {
+  description = "Whether to enable private IP Google access for the subnet"
   type        = bool
   default     = true
 }
 
-variable "additional_private_subnet_cidrs" {
-  description = "Additional secondary ip ranges for the private subnet"
+variable "additional_main_subnet_cidrs" {
+  description = "Additional secondary ip ranges for the main subnet"
   type = list(object({
     name = string
     cidr = string
@@ -32,7 +47,7 @@ variable "additional_subnets" {
   default = []
 }
 
-variable "regional" {
+variable "cluster_regional" {
   description = "Cluster is regional if true (recommended), zonal if false"
   type        = bool
   default     = true
@@ -71,7 +86,7 @@ variable "create_nodes_service_account" {
 variable "additional_service_accounts" {
   description = "Additional service accounts to create"
   type = list(object({
-    name = string
+    name  = string
     roles = list(string)
   }))
   default = []
@@ -91,11 +106,17 @@ variable "cluster_resource_labels" {
 
 variable "node_pools" {
   type        = list(map(any))
-  description = "List of maps containing node pools configurations"
+  description = "List of maps containing node pools configurations. Autoscaling is enabled by default."
 
   default = [
     {
       name = "default-node-pool"
     },
   ]
+}
+
+variable "enable_iap_ssh" {
+  description = "Whether to enable IAP SSH access to the nodes"
+  type        = bool
+  default     = false
 }
