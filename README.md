@@ -87,6 +87,7 @@ No modules.
 | <a name="input_cluster_regional"></a> [cluster\_regional](#input\_cluster\_regional) | Cluster is regional if true (recommended), zonal if false | `bool` | `true` | no |
 | <a name="input_cluster_resource_labels"></a> [cluster\_resource\_labels](#input\_cluster\_resource\_labels) | Key-value pairs to be added to the cluster | `map(string)` | `{}` | no |
 | <a name="input_create_nodes_service_account"></a> [create\_nodes\_service\_account](#input\_create\_nodes\_service\_account) | Whether to create a service account for the nodes in the GKE cluster | `bool` | `true` | no |
+| <a name="input_enable_iap_ssh"></a> [enable\_iap\_ssh](#input\_enable\_iap\_ssh) | Whether to enable IAP SSH access to the nodes | `bool` | `false` | no |
 | <a name="input_enable_l4_ilb_subsetting"></a> [enable\_l4\_ilb\_subsetting](#input\_enable\_l4\_ilb\_subsetting) | Whether to enable L4 ILB subsetting | `bool` | `true` | no |
 | <a name="input_node_pools"></a> [node\_pools](#input\_node\_pools) | List of maps containing node pools configurations | `list(map(any))` | <pre>[<br/>  {<br/>    "name": "default-node-pool"<br/>  }<br/>]</pre> | no |
 | <a name="input_node_sa_roles"></a> [node\_sa\_roles](#input\_node\_sa\_roles) | Additional roles to add to the nodes service account | `list(string)` | `[]` | no |
