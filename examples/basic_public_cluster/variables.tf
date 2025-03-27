@@ -37,4 +37,5 @@ variable "node_pools" {
 
 variable "enable_iap_ssh" {
   description = "Whether to enable IAP SSH access to the nodes"
+  default     = false
 }
