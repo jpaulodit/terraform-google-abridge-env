@@ -20,24 +20,24 @@ resource "google_compute_network" "vpc_network" {
 resource "google_compute_subnetwork" "main" {
   name                     = "${var.vpc_name}-${random_string.suffix.result}"
   region                   = var.region
-  ip_cidr_range            = "10.80.0.0/20" # Primary range: IPs for nodes
+  ip_cidr_range            = var.subnet_primary_cidr
   network                  = google_compute_network.vpc_network.id
-  private_ip_google_access = true
+  private_ip_google_access = var.private_ip_google_access
 
   stack_type = "IPV4_ONLY"
 
   secondary_ip_range {
     range_name    = "${var.vpc_name}-main-services-range"
-    ip_cidr_range = "10.80.16.0/20" # Services range: IPs for k8s services
+    ip_cidr_range = var.subnet_services_cidr # Services range: IPs for k8s services
   }
 
   secondary_ip_range {
     range_name    = "${var.vpc_name}-main-pods-range"
-    ip_cidr_range = "10.80.32.0/19" # Pods range: IPs for pods (larger range)
+    ip_cidr_range = var.subnet_pods_cidr # Pods range: IPs for pods (larger range)
   }
 
   dynamic "secondary_ip_range" {
-    for_each = var.additional_private_subnet_cidrs
+    for_each = var.additional_main_subnet_cidrs
     content {
       range_name    = secondary_ip_range.value.name
       ip_cidr_range = secondary_ip_range.value.cidr
@@ -63,4 +63,21 @@ resource "google_compute_subnetwork" "additional_subnets" {
   ip_cidr_range = each.value.cidr
   network       = google_compute_network.vpc_network.id
   stack_type    = "IPV4_ONLY"
+}
+
+# Allow SSH via Identity-Aware Proxy
+resource "google_compute_firewall" "iap_ssh" {
+  count   = var.enable_iap_ssh ? 1 : 0
+  name    = "${var.vpc_name}-allow-iap-ssh"
+  network = google_compute_network.vpc_network.name
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+
+  # Identity-Aware Proxy's IP range
+  source_ranges = ["35.235.240.0/20"]
+
+  target_tags = [local.network_tag]
 }

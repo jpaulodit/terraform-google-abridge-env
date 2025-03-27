@@ -17,16 +17,16 @@ locals {
   node_sa_roles = var.create_nodes_service_account ? [
     # Minimum required role for GKE nodes
     "roles/container.defaultNodeServiceAccount",
-    
+
     # Roles for logging and monitoring
     "roles/monitoring.metricWriter",
     "roles/logging.logWriter",
     "roles/stackdriver.resourceMetadata.writer",
-    
+
     # Roles for container operations
     "roles/artifactregistry.reader",
     "roles/storage.objectViewer",
-    
+
     # Role for service usage
     "roles/serviceusage.serviceUsageConsumer"
   ] : []
@@ -42,7 +42,7 @@ resource "google_project_iam_member" "node_sa_roles" {
 
 # Create additional service accounts if specified
 resource "google_service_account" "additional_service_accounts" {
-  for_each = { for sa in var.additional_service_accounts : sa.name => sa }
+  for_each     = { for sa in var.additional_service_accounts : sa.name => sa }
   project      = var.project_id
   account_id   = "${each.value.name}-${random_id.nodes_sa_id.hex}"
   display_name = each.value.name
@@ -60,8 +60,8 @@ resource "google_project_iam_member" "additional_service_account_roles" {
       ]
     ]) : "${pair.sa_name}-${pair.role}" => pair
   }
-  project  = var.project_id
-  role     = each.value.role
-  member   = google_service_account.additional_service_accounts[each.value.sa_name].member
+  project = var.project_id
+  role    = each.value.role
+  member  = google_service_account.additional_service_accounts[each.value.sa_name].member
 }
 

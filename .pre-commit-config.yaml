@@ -1,0 +1,12 @@
+repos:
+- repo: https://github.com/antonbabenko/pre-commit-terraform
+  rev: v1.98.0  # Get the latest from: https://github.com/antonbabenko/pre-commit-terraform/releases
+  hooks:
+    - id: terraform_fmt
+      args:
+        - --args=-recursive
+    - id: terraform_docs
+      args:
+        - --hook-config=--path-to-file=README.md        # path to where you want the docs
+        - --hook-config=--add-to-existing-file=true     # append to existing file
+        - --hook-config=--create-file-if-not-exist=true # create file if it doesn't exist 
