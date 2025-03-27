@@ -10,5 +10,4 @@ module "basic_public_cluster" {
   subnet_pods_cidr     = var.subnet_pods_cidr
   cluster_name         = var.cluster_name
   node_pools           = var.node_pools
-  enable_iap_ssh       = var.enable_iap_ssh
 }

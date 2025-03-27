@@ -4,13 +4,6 @@ resource "random_shuffle" "available_zones" {
   result_count = 3
 }
 
-data "google_compute_zones" "zones" {
-  count   = local.zone_count == 0 ? 1 : 0
-  status  = "UP"
-  region  = var.region
-  project = var.project_id
-}
-
 locals {
   zone_count     = length(var.zones)
   location       = var.cluster_regional ? var.region : var.zones[0] # If regional, use the region, otherwise use the first zone.
