@@ -83,7 +83,7 @@ variable "create_nodes_service_account" {
   default     = true
 }
 
-variable "node_sa_roles" {
+variable "additional_node_sa_roles" {
   description = "Additional roles to add to the nodes service account"
   type        = list(string)
   default     = []

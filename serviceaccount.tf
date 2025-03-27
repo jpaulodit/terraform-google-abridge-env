@@ -27,7 +27,7 @@ locals {
     "roles/serviceusage.serviceUsageConsumer"
   ]
 
-  node_sa_roles = var.create_nodes_service_account ? concat(local.default_node_sa_roles, var.node_sa_roles) : []
+  node_sa_roles = var.create_nodes_service_account ? concat(local.default_node_sa_roles, var.additional_node_sa_roles) : []
 }
 
 resource "google_project_iam_member" "node_sa_roles" {
