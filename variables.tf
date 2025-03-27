@@ -83,6 +83,12 @@ variable "create_nodes_service_account" {
   default     = true
 }
 
+variable "additional_node_sa_roles" {
+  description = "Additional roles to add to the nodes service account"
+  type        = list(string)
+  default     = []
+}
+
 variable "additional_service_accounts" {
   description = "Additional service accounts to create"
   type = list(object({
@@ -106,7 +112,7 @@ variable "cluster_resource_labels" {
 
 variable "node_pools" {
   type        = list(map(any))
-  description = "List of maps containing node pools configurations. Autoscaling is enabled by default."
+  description = "List of maps containing node pools configurations"
 
   default = [
     {

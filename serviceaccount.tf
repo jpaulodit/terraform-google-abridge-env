@@ -14,22 +14,20 @@ resource "google_service_account" "nodes_sa" {
 # Grant the service account the necessary roles
 locals {
   # Roles required for GKE node operations
-  node_sa_roles = var.create_nodes_service_account ? [
-    # Minimum required role for GKE nodes
+  default_node_sa_roles = [
     "roles/container.defaultNodeServiceAccount",
-
     # Roles for logging and monitoring
     "roles/monitoring.metricWriter",
     "roles/logging.logWriter",
     "roles/stackdriver.resourceMetadata.writer",
-
     # Roles for container operations
     "roles/artifactregistry.reader",
     "roles/storage.objectViewer",
-
     # Role for service usage
     "roles/serviceusage.serviceUsageConsumer"
-  ] : []
+  ]
+
+  node_sa_roles = var.create_nodes_service_account ? concat(local.default_node_sa_roles, var.additional_node_sa_roles) : []
 }
 
 resource "google_project_iam_member" "node_sa_roles" {
