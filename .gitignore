@@ -1,7 +1,7 @@
-# IntelliJ IDEA files:
+# IntelliJ IDEA files
 .idea/
 
-# Visual Studio Code files:
+# Visual Studio Code files
 .vscode/
 
 # Local .terraform directories
@@ -20,5 +20,3 @@
 # Crash logs
 crash.log
 crash.*.log
-
-
