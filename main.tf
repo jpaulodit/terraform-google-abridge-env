@@ -80,8 +80,9 @@ resource "google_container_node_pool" "main" {
   dynamic "autoscaling" {
     for_each = lookup(each.value, "autoscaling", true) ? [each.value] : []
     content {
-      min_node_count = lookup(autoscaling.value, "min_node_count", 1)
-      max_node_count = lookup(autoscaling.value, "max_node_count", 100)
+      min_node_count  = lookup(autoscaling.value, "min_node_count", 1)
+      max_node_count  = lookup(autoscaling.value, "max_node_count", 100)
+      location_policy = lookup(autoscaling.value, "location_policy", null)
     }
   }
 
@@ -89,6 +90,8 @@ resource "google_container_node_pool" "main" {
     preemptible     = lookup(each.value, "preemptible", false)
     machine_type    = lookup(each.value, "machine_type", "e2-medium")
     service_account = lookup(each.value, "service_account", google_service_account.nodes_sa[0].email)
+    disk_size_gb    = lookup(each.value, "disk_size_gb", 100)        # The smallest allowed disk size is 10GB
+    disk_type       = lookup(each.value, "disk_type", "pd-standard") # Supported pd-standard, pd-balanced or pd-ssd, default is pd-standard    
     tags            = lookup(each.value, "tags", null) != null ? concat(split(",", lookup(each.value, "tags")), [local.network_tag]) : [local.network_tag]
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"

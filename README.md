@@ -62,6 +62,8 @@ No modules.
 |------|------|
 | [google_compute_firewall.iap_ssh](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_firewall) | resource |
 | [google_compute_network.vpc_network](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_network) | resource |
+| [google_compute_router.cloud_router](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_router) | resource |
+| [google_compute_router_nat.cloud_nat](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_router_nat) | resource |
 | [google_compute_subnetwork.additional_subnets](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_subnetwork) | resource |
 | [google_compute_subnetwork.main](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_subnetwork) | resource |
 | [google_container_cluster.main](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_cluster) | resource |
@@ -90,6 +92,7 @@ No modules.
 | <a name="input_create_nodes_service_account"></a> [create\_nodes\_service\_account](#input\_create\_nodes\_service\_account) | Whether to create a service account for the nodes in the GKE cluster | `bool` | `true` | no |
 | <a name="input_enable_iap_ssh"></a> [enable\_iap\_ssh](#input\_enable\_iap\_ssh) | Whether to enable IAP SSH access to the nodes | `bool` | `false` | no |
 | <a name="input_enable_l4_ilb_subsetting"></a> [enable\_l4\_ilb\_subsetting](#input\_enable\_l4\_ilb\_subsetting) | Whether to enable L4 ILB subsetting | `bool` | `true` | no |
+| <a name="input_enable_private_cluster_internet"></a> [enable\_private\_cluster\_internet](#input\_enable\_private\_cluster\_internet) | Whether to enable private cluster to have internet access | `bool` | `false` | no |
 | <a name="input_enable_private_endpoint"></a> [enable\_private\_endpoint](#input\_enable\_private\_endpoint) | Whether to enable private endpoint | `bool` | `false` | no |
 | <a name="input_enable_private_nodes"></a> [enable\_private\_nodes](#input\_enable\_private\_nodes) | Whether to enable private nodes | `bool` | `false` | no |
 | <a name="input_node_pools"></a> [node\_pools](#input\_node\_pools) | List of maps containing node pools configurations | `list(map(any))` | <pre>[<br/>  {<br/>    "name": "default-node-pool"<br/>  }<br/>]</pre> | no |
@@ -108,6 +111,8 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_cluster_name"></a> [cluster\_name](#output\_cluster\_name) | The name of the cluster |
+| <a name="output_gke_main_nodepool_id"></a> [gke\_main\_nodepool\_id](#output\_gke\_main\_nodepool\_id) | GKE Main Node Pool ID |
+| <a name="output_gke_main_nodepool_version"></a> [gke\_main\_nodepool\_version](#output\_gke\_main\_nodepool\_version) | GKE Main Node Pool version |
 | <a name="output_node_locations"></a> [node\_locations](#output\_node\_locations) | The locations of the nodes |
 | <a name="output_node_service_account_email"></a> [node\_service\_account\_email](#output\_node\_service\_account\_email) | The email address of the service account |
 <!-- END_TF_DOCS -->

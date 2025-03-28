@@ -13,3 +13,12 @@ output "node_locations" {
   description = "The locations of the nodes"
   value       = local.node_locations
 }
+
+output "gke_main_nodepool_id" {
+  description = "GKE Main Node Pool ID"
+  value       = google_container_node_pool.main.id
+}
+output "gke_main_nodepool_version" {
+  description = "GKE Main Node Pool version"
+  value       = google_container_node_pool.main.version
+}

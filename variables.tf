@@ -147,3 +147,9 @@ variable "enable_iap_ssh" {
   type        = bool
   default     = false
 }
+
+variable "enable_private_cluster_internet" {
+  description = "Whether to enable private cluster to have internet access"
+  type        = bool
+  default     = false
+}
