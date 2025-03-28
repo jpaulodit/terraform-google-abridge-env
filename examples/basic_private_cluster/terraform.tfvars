@@ -9,7 +9,7 @@ subnet_pods_cidr     = "10.80.32.0/19"
 
 # Cluster configuration
 cluster_regional = false
-zones            = ["us-east1-a"]
+zones            = ["us-east1-b"]
 cluster_name     = "private-cluster"
 node_pools = [
   {
@@ -21,9 +21,9 @@ node_pools = [
 ]
 
 enable_private_nodes    = true
-enable_private_endpoint = true
+enable_private_endpoint = false
 private_master_cidrs = [{
   cidr_block   = "98.41.59.48/32",
   display_name = "home-ip"
 }]
-enable_private_cluster_internet = false
+enable_private_cluster_internet = true
