@@ -1,46 +1,66 @@
-This directory contains an example for basic public cluster. There are variables set inside terraform.tfvars 
+This directory contains an example for basic public cluster. The variables are set inside terraform.tfvars. 
 
 To try out this example, run the following commands in this directory
-
-- `terraform init` - to initialize the working directory and download any modules, plugins, etc...
-- `terraform plan -out=tfplan` - to see the changes that will be made
-- `terraform apply tfplan` - to apply the changes
-- `terraform destroy` - to destroy and clean up the work
-
-## Inputs 
-
-```hcl
-# terraform.tfvars
-
-project_id = "learn-gke-454605-f0"
-
-# Networking
-vpc_name             = "public-cluster"
-region               = "us-east1"
-subnet_primary_cidr  = "10.80.0.0/20"
-subnet_services_cidr = "10.80.16.0/20"
-subnet_pods_cidr     = "10.80.32.0/19"
-
-# Cluster configuration
-cluster_regional = true
-cluster_name     = "public-cluster"
-node_pools = [
-  {
-    name         = "default-node-pool"
-    machine_type = "e2-medium"
-    node_count   = 1
-    autoscaling  = false
-    tags         = "tag-1,tag-2"
-  }
-]
-```
-
 
 This creates
 - 1 VPC and 1 subnet.
 - 1 regional GKE cluster in us-east1 across in 3 zones.
 - 1 custom service account is created for the nodes.
 - 1 node pool with autoscaling set to false. There is 1 node per zone, and every node gets a public and private IP address. 
+
+Commands to run locally are
+
+- `terraform init` - to initialize the working directory and download any modules, plugins, etc...
+- `terraform plan -out=tfplan` - to see the changes that will be made
+- `terraform apply tfplan` - to apply the changes
+- `terraform destroy` - to destroy and clean up the work
+
+## Example Usage
+
+```hcl
+terraform {
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 6.0"
+    }
+  }
+  required_version = ">= 1.0.0"
+}
+
+provider "google" {
+  project = "learn-gke-454605-f0" # set this to your own project ID.
+  region  = "us-east1"
+}
+
+module "public-cluster" {
+    source = "git@github.com:jpaulodit/terraform-google-abridge-env.git"
+
+    project_id = "learn-gke-454605-f0"  # Set this to your own project ID
+
+    # Networking
+    vpc_name             = "public-cluster"
+    region               = "us-east1"
+    subnet_primary_cidr  = "10.80.0.0/20"
+    subnet_services_cidr = "10.80.16.0/20"
+    subnet_pods_cidr     = "10.80.32.0/19"
+
+    # Cluster configuration
+    cluster_regional = true
+    cluster_name     = "public-cluster"
+    node_pools = [
+      {
+        name         = "public-node-pool"
+        machine_type = "e2-medium"
+        node_count   = 1
+        autoscaling  = false
+        tags         = "tag-1,tag-2"
+      }
+    ]
+}
+```
+
+
 
 
 <!-- BEGIN_TF_DOCS -->

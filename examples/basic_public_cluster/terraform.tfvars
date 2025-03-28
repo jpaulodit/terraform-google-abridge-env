@@ -12,7 +12,7 @@ cluster_regional = true
 cluster_name     = "public-cluster"
 node_pools = [
   {
-    name         = "default-node-pool"
+    name         = "public-node-pool"
     machine_type = "e2-medium"
     node_count   = 1
     autoscaling  = false
