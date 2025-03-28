@@ -16,9 +16,10 @@ output "node_locations" {
 
 output "gke_main_nodepool_id" {
   description = "GKE Main Node Pool ID"
-  value       = google_container_node_pool.main.id
+  value       = { for k, v in google_container_node_pool.main : k => v.id }
 }
+
 output "gke_main_nodepool_version" {
   description = "GKE Main Node Pool version"
-  value       = google_container_node_pool.main.version
+  value       = { for k, v in google_container_node_pool.main : k => v.version }
 }
