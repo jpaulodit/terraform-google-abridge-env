@@ -39,6 +39,30 @@ resource "google_container_cluster" "main" {
     cluster_secondary_range_name  = google_compute_subnetwork.main.secondary_ip_range[1].range_name
   }
 
+  # If user wants private cluster, we need to enable private nodes and private endpoint (maybe).
+  # Enable private endpoint applies only when prviate nodes is enabled.
+  dynamic "private_cluster_config" {
+    for_each = var.enable_private_nodes ? [1] : []
+    content {
+      enable_private_nodes    = var.enable_private_nodes
+      enable_private_endpoint = var.enable_private_endpoint
+    }
+  }
+
+  # This is used to control which CIDRs can access the control plane.
+  dynamic "master_authorized_networks_config" {
+    for_each = var.enable_private_nodes || length(var.private_master_cidrs) > 0 ? [1] : []
+    content {
+      dynamic "cidr_blocks" {
+        for_each = var.private_master_cidrs
+        content {
+          cidr_block   = cidr_blocks.value.cidr_block
+          display_name = cidr_blocks.value.display_name
+        }
+      }
+    }
+  }
+
   resource_labels = var.cluster_resource_labels
 
   # Disable deletion protection so we can delete the cluster after exercise

@@ -90,8 +90,11 @@ No modules.
 | <a name="input_create_nodes_service_account"></a> [create\_nodes\_service\_account](#input\_create\_nodes\_service\_account) | Whether to create a service account for the nodes in the GKE cluster | `bool` | `true` | no |
 | <a name="input_enable_iap_ssh"></a> [enable\_iap\_ssh](#input\_enable\_iap\_ssh) | Whether to enable IAP SSH access to the nodes | `bool` | `false` | no |
 | <a name="input_enable_l4_ilb_subsetting"></a> [enable\_l4\_ilb\_subsetting](#input\_enable\_l4\_ilb\_subsetting) | Whether to enable L4 ILB subsetting | `bool` | `true` | no |
+| <a name="input_enable_private_endpoint"></a> [enable\_private\_endpoint](#input\_enable\_private\_endpoint) | Whether to enable private endpoint | `bool` | `false` | no |
+| <a name="input_enable_private_nodes"></a> [enable\_private\_nodes](#input\_enable\_private\_nodes) | Whether to enable private nodes | `bool` | `false` | no |
 | <a name="input_node_pools"></a> [node\_pools](#input\_node\_pools) | List of maps containing node pools configurations | `list(map(any))` | <pre>[<br/>  {<br/>    "name": "default-node-pool"<br/>  }<br/>]</pre> | no |
 | <a name="input_private_ip_google_access"></a> [private\_ip\_google\_access](#input\_private\_ip\_google\_access) | Whether to enable private IP Google access for the subnet | `bool` | `true` | no |
+| <a name="input_private_master_cidrs"></a> [private\_master\_cidrs](#input\_private\_master\_cidrs) | List of CIDRs from which access to the control plane is allowed. This kicks in when enable\_private\_endpoint is true. If none is provided, only access from the cluster node IPs is allowed. | <pre>list(object({<br/>    cidr_block   = string,<br/>    display_name = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The GCP project ID | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The GCP region for the cluster. If cluster is regional, specify the region. | `string` | `"us-east1"` | no |
 | <a name="input_subnet_pods_cidr"></a> [subnet\_pods\_cidr](#input\_subnet\_pods\_cidr) | The pods CIDR block for the subnet. Eg: 10.80.32.0/19 | `string` | n/a | yes |
