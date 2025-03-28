@@ -73,6 +73,7 @@ resource "google_container_node_pool" "main" {
   for_each = { for np in var.node_pools : np.name => np }
   name     = "${each.value.name}-${random_id.nodes_sa_id.hex}"
   cluster  = google_container_cluster.main.name
+  location = local.location
 
   # Autoscaling is enabled by default.
   node_count = lookup(each.value, "autoscaling", true) ? null : lookup(each.value, "node_count", 1)
