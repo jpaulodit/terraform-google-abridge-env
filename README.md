@@ -62,6 +62,8 @@ No modules.
 |------|------|
 | [google_compute_firewall.iap_ssh](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_firewall) | resource |
 | [google_compute_network.vpc_network](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_network) | resource |
+| [google_compute_router.cloud_router](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_router) | resource |
+| [google_compute_router_nat.cloud_nat](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_router_nat) | resource |
 | [google_compute_subnetwork.additional_subnets](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_subnetwork) | resource |
 | [google_compute_subnetwork.main](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_subnetwork) | resource |
 | [google_container_cluster.main](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/container_cluster) | resource |
@@ -90,8 +92,12 @@ No modules.
 | <a name="input_create_nodes_service_account"></a> [create\_nodes\_service\_account](#input\_create\_nodes\_service\_account) | Whether to create a service account for the nodes in the GKE cluster | `bool` | `true` | no |
 | <a name="input_enable_iap_ssh"></a> [enable\_iap\_ssh](#input\_enable\_iap\_ssh) | Whether to enable IAP SSH access to the nodes | `bool` | `false` | no |
 | <a name="input_enable_l4_ilb_subsetting"></a> [enable\_l4\_ilb\_subsetting](#input\_enable\_l4\_ilb\_subsetting) | Whether to enable L4 ILB subsetting | `bool` | `true` | no |
+| <a name="input_enable_private_cluster_internet"></a> [enable\_private\_cluster\_internet](#input\_enable\_private\_cluster\_internet) | Whether to enable private cluster to have internet access | `bool` | `false` | no |
+| <a name="input_enable_private_endpoint"></a> [enable\_private\_endpoint](#input\_enable\_private\_endpoint) | Whether to enable private endpoint | `bool` | `false` | no |
+| <a name="input_enable_private_nodes"></a> [enable\_private\_nodes](#input\_enable\_private\_nodes) | Whether to enable private nodes | `bool` | `false` | no |
 | <a name="input_node_pools"></a> [node\_pools](#input\_node\_pools) | List of maps containing node pools configurations | `list(map(any))` | <pre>[<br/>  {<br/>    "name": "default-node-pool"<br/>  }<br/>]</pre> | no |
 | <a name="input_private_ip_google_access"></a> [private\_ip\_google\_access](#input\_private\_ip\_google\_access) | Whether to enable private IP Google access for the subnet | `bool` | `true` | no |
+| <a name="input_private_master_cidrs"></a> [private\_master\_cidrs](#input\_private\_master\_cidrs) | List of CIDRs from which access to the control plane is allowed. This kicks in when enable\_private\_endpoint is true. If none is provided, only access from the cluster node IPs is allowed. | <pre>list(object({<br/>    cidr_block   = string,<br/>    display_name = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The GCP project ID | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | The GCP region for the cluster. If cluster is regional, specify the region. | `string` | `"us-east1"` | no |
 | <a name="input_subnet_pods_cidr"></a> [subnet\_pods\_cidr](#input\_subnet\_pods\_cidr) | The pods CIDR block for the subnet. Eg: 10.80.32.0/19 | `string` | n/a | yes |
@@ -105,6 +111,8 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_cluster_name"></a> [cluster\_name](#output\_cluster\_name) | The name of the cluster |
+| <a name="output_gke_main_nodepool_id"></a> [gke\_main\_nodepool\_id](#output\_gke\_main\_nodepool\_id) | GKE Main Node Pool ID |
+| <a name="output_gke_main_nodepool_version"></a> [gke\_main\_nodepool\_version](#output\_gke\_main\_nodepool\_version) | GKE Main Node Pool version |
 | <a name="output_node_locations"></a> [node\_locations](#output\_node\_locations) | The locations of the nodes |
 | <a name="output_node_service_account_email"></a> [node\_service\_account\_email](#output\_node\_service\_account\_email) | The email address of the service account |
 <!-- END_TF_DOCS -->

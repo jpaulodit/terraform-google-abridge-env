@@ -121,8 +121,35 @@ variable "node_pools" {
   ]
 }
 
+variable "enable_private_nodes" {
+  description = "Whether to enable private nodes"
+  type        = bool
+  default     = false
+}
+
+variable "enable_private_endpoint" {
+  description = "Whether to enable private endpoint"
+  type        = bool
+  default     = false
+}
+
+variable "private_master_cidrs" {
+  type = list(object({
+    cidr_block   = string,
+    display_name = string
+  }))
+  description = "List of CIDRs from which access to the control plane is allowed. This kicks in when enable_private_endpoint is true. If none is provided, only access from the cluster node IPs is allowed."
+  default     = []
+}
+
 variable "enable_iap_ssh" {
   description = "Whether to enable IAP SSH access to the nodes"
+  type        = bool
+  default     = false
+}
+
+variable "enable_private_cluster_internet" {
+  description = "Whether to enable private cluster to have internet access"
   type        = bool
   default     = false
 }

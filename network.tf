@@ -45,17 +45,6 @@ resource "google_compute_subnetwork" "main" {
   }
 }
 
-# # Create a public subnet. This will be used for workloads
-# # like public facing load balancers.
-# resource "google_compute_subnetwork" "public_subnet" {
-#   count         = var.create_public_subnet ? 1 : 0
-#   name          = "${var.vpc_name}-public"
-#   region        = var.region
-#   ip_cidr_range = "10.81.0.0/20"
-#   network       = google_compute_network.vpc_network.id
-#   stack_type    = "IPV4_ONLY"
-# }
-
 resource "google_compute_subnetwork" "additional_subnets" {
   for_each      = toset(var.additional_subnets)
   name          = "${var.vpc_name}-${each.value.name}"
@@ -80,4 +69,26 @@ resource "google_compute_firewall" "iap_ssh" {
   source_ranges = ["35.235.240.0/20"]
 
   target_tags = [local.network_tag]
+}
+
+# Configure Cloud Router which will be used to group NAT configuration information
+resource "google_compute_router" "cloud_router" {
+  count   = var.enable_private_cluster_internet ? 1 : 0
+  name    = "${var.vpc_name}-${var.region}-cloud-router"
+  region  = var.region
+  network = google_compute_network.vpc_network.id
+}
+
+# Configure Cloud NAT
+resource "google_compute_router_nat" "cloud_nat" {
+  count                              = var.enable_private_cluster_internet ? 1 : 0
+  name                               = "${var.vpc_name}-${var.region}-cloud-nat"
+  router                             = google_compute_router.cloud_router[0].name
+  region                             = google_compute_router.cloud_router[0].region
+  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
+  nat_ip_allocate_option             = "AUTO_ONLY"
+  log_config {
+    enable = true
+    filter = "ERRORS_ONLY"
+  }
 }
