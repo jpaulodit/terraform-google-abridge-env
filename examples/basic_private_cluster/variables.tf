@@ -39,6 +39,12 @@ variable "node_pools" {
   description = "List of maps containing node pools configurations"
 }
 
+variable "node_pool_k8s_labels" {
+  type        = map(map(string))
+  description = "Key-value pairs to be added to the node pools"
+  default     = {}
+}
+
 variable "enable_private_nodes" {
   description = "Whether to enable private nodes"
 }

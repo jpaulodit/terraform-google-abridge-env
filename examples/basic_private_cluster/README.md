@@ -1,4 +1,4 @@
-This directory contains an example for basic private cluster. There are variables set inside terraform.tfvars 
+This directory contains an example for a basic private cluster. There are variables set inside terraform.tfvars.
 
 To try out this example, run the following commands in this directory
 
@@ -7,40 +7,59 @@ To try out this example, run the following commands in this directory
 - `terraform apply tfplan` - to apply the changes
 - `terraform destroy` - to destroy and clean up the work
 
+This creates
+- 1 VPC and 1 subnet.
+- 1 zonal GKE cluster in us-east1-b. Private nodes is enabled so all provisioned nodes are assigned only private IPs.
+- The controlplane endpoint access from the internet is restricted to an IP address.
+- 1 custom service account is created for the nodes.
+- 1 node pool with autoscaling set to true, with a minimum node count of 1 and a maximum node count of 3.
+- adds labels to the node
+
 ## Inputs 
 
 ```hcl
-# terraform.tfvars
-
-project_id = "learn-gke-454605-f0"
-
-# Networking
-vpc_name             = "public-cluster"
-region               = "us-east1"
-subnet_primary_cidr  = "10.80.0.0/20"
-subnet_services_cidr = "10.80.16.0/20"
-subnet_pods_cidr     = "10.80.32.0/19"
-
-# Cluster configuration
-cluster_regional = true
-cluster_name     = "public-cluster"
-node_pools = [
-  {
-    name         = "default-node-pool"
-    machine_type = "e2-medium"
-    node_count   = 1
-    autoscaling  = false
-    tags         = "tag-1,tag-2"
+terraform {
+  required_version = ">= 1.0.0"
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 6.0"
+    }
   }
-]
+}
+
+provider "google" {
+  project = "learn-gke-454605-f0" # set this to your own project ID.
+  region  = "us-east1-b"
+}
+
+module "private-cluster" {
+    source = "git@github.com:jpaulodit/terraform-google-abridge-env.git"
+
+    project_id = "learn-gke-454605-f0"  # Set this to your own project ID
+
+    # Networking
+    vpc_name             = "private-vpc"
+    region               = "us-east1"
+    subnet_primary_cidr  = "10.80.0.0/20"
+    subnet_services_cidr = "10.80.16.0/20"
+    subnet_pods_cidr     = "10.80.32.0/19"
+
+    # Cluster configuration
+    cluster_regional = true
+    zones            = ["us-east1-b"]
+    cluster_name     = "private-cluster"
+    node_pools = [
+      {
+        name         = "private-node-pool"
+        machine_type = "e2-medium"
+        autoscaling  = true
+      }
+    ]
+}
 ```
 
 
-This creates
-- 1 VPC and 1 subnet.
-- 1 regional GKE cluster in us-east1 across in 3 zones.
-- 1 custom service account is created for the nodes.
-- 1 node pool with autoscaling set to false. There is 1 node per zone, and every node gets a public and private IP address. 
 
 
 <!-- BEGIN_TF_DOCS -->
@@ -59,7 +78,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_basic_public_cluster"></a> [basic\_public\_cluster](#module\_basic\_public\_cluster) | ../../ | n/a |
+| <a name="module_basic_private_cluster"></a> [basic\_private\_cluster](#module\_basic\_private\_cluster) | ../../ | n/a |
 
 ## Resources
 
@@ -74,6 +93,7 @@ No resources.
 | <a name="input_enable_private_cluster_internet"></a> [enable\_private\_cluster\_internet](#input\_enable\_private\_cluster\_internet) | Whether to enable private cluster to have internet access | `any` | n/a | yes |
 | <a name="input_enable_private_endpoint"></a> [enable\_private\_endpoint](#input\_enable\_private\_endpoint) | Whether to enable private endpoint | `any` | n/a | yes |
 | <a name="input_enable_private_nodes"></a> [enable\_private\_nodes](#input\_enable\_private\_nodes) | Whether to enable private nodes | `any` | n/a | yes |
+| <a name="input_node_pool_k8s_labels"></a> [node\_pool\_k8s\_labels](#input\_node\_pool\_k8s\_labels) | Key-value pairs to be added to the node pools | `map(map(string))` | `{}` | no |
 | <a name="input_node_pools"></a> [node\_pools](#input\_node\_pools) | List of maps containing node pools configurations | `list(map(any))` | n/a | yes |
 | <a name="input_private_master_cidrs"></a> [private\_master\_cidrs](#input\_private\_master\_cidrs) | List of CIDRs from which access to the control plane is allowed. | <pre>list(object({<br/>    cidr_block   = string,<br/>    display_name = string<br/>  }))</pre> | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The GCP project ID | `any` | n/a | yes |

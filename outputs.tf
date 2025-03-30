@@ -1,7 +1,7 @@
 # Output the email for use in other resources
 output "node_service_account_email" {
   description = "The email address of the service account"
-  value       = var.create_nodes_service_account ? google_service_account.nodes_sa[0].email : ""
+  value       = google_service_account.nodes_sa.email
 }
 
 output "cluster_name" {

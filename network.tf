@@ -65,7 +65,7 @@ resource "google_compute_firewall" "iap_ssh" {
     ports    = ["22"]
   }
 
-  # Identity-Aware Proxy's IP range
+  # Identity-Aware Proxy's IP range. This IP range is given by Google Cloud.
   source_ranges = ["35.235.240.0/20"]
 
   target_tags = [local.network_tag]
@@ -73,7 +73,7 @@ resource "google_compute_firewall" "iap_ssh" {
 
 # Configure Cloud Router which will be used to group NAT configuration information
 resource "google_compute_router" "cloud_router" {
-  count   = var.enable_private_cluster_internet ? 1 : 0
+  count   = var.enable_private_cluster_access_internet ? 1 : 0
   name    = "${var.vpc_name}-${var.region}-cloud-router"
   region  = var.region
   network = google_compute_network.vpc_network.id
@@ -81,7 +81,7 @@ resource "google_compute_router" "cloud_router" {
 
 # Configure Cloud NAT
 resource "google_compute_router_nat" "cloud_nat" {
-  count                              = var.enable_private_cluster_internet ? 1 : 0
+  count                              = var.enable_private_cluster_access_internet ? 1 : 0
   name                               = "${var.vpc_name}-${var.region}-cloud-nat"
   router                             = google_compute_router.cloud_router[0].name
   region                             = google_compute_router.cloud_router[0].region

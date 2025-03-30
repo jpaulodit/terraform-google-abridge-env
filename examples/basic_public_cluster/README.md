@@ -1,4 +1,4 @@
-This directory contains an example for basic public cluster. The variables are set inside terraform.tfvars. 
+This directory contains an example for a basic public cluster. The variables are set inside terraform.tfvars. 
 
 To try out this example, run the following commands in this directory
 
@@ -19,13 +19,13 @@ Commands to run locally are
 
 ```hcl
 terraform {
+  required_version = ">= 1.0.0"
   required_providers {
     google = {
       source  = "hashicorp/google"
       version = "~> 6.0"
     }
   }
-  required_version = ">= 1.0.0"
 }
 
 provider "google" {
@@ -79,7 +79,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_basic_public_cluster"></a> [basic\_public\_cluster](#module\_basic\_public\_cluster) | ../../ | n/a |
+| <a name="module_basic_public_cluster"></a> [basic\_public\_cluster](#module\_basic\_public\_cluster) | git@github.com:jpaulodit/terraform-google-abridge-env.git | n/a |
 
 ## Resources
 

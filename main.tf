@@ -4,11 +4,13 @@ resource "random_shuffle" "available_zones" {
   result_count = 3
 }
 
+
 locals {
-  zone_count     = length(var.zones)
-  location       = var.cluster_regional ? var.region : var.zones[0] # If regional, use the region, otherwise use the first zone.
-  node_locations = var.cluster_regional ? coalescelist(compact(var.zones), try(sort(random_shuffle.available_zones[0].result), [])) : slice(var.zones, 1, length(var.zones))
-  network_tag    = "gke-${var.cluster_name}-node"
+  zone_count       = length(var.zones)
+  location         = var.cluster_regional ? var.region : var.zones[0] # If regional, use the region, otherwise use the first zone.
+  node_locations   = var.cluster_regional ? coalescelist(compact(var.zones), try(sort(random_shuffle.available_zones[0].result), [])) : slice(var.zones, 1, length(var.zones))
+  network_tag      = "gke-${var.cluster_name}-node"
+  default_sa_email = google_service_account.nodes_sa.email
 }
 
 resource "google_container_cluster" "main" {
@@ -65,13 +67,17 @@ resource "google_container_cluster" "main" {
 
   resource_labels = var.cluster_resource_labels
 
+  vertical_pod_autoscaling {
+    enabled = var.enable_pod_vertical_pod_autoscaler
+  }
+
   # Disable deletion protection so we can delete the cluster after exercise
   deletion_protection = false
 }
 
 resource "google_container_node_pool" "main" {
   for_each = { for np in var.node_pools : np.name => np }
-  name     = "${each.value.name}-${random_id.nodes_sa_id.hex}"
+  name     = each.value.name
   cluster  = google_container_cluster.main.name
   location = local.location
 
@@ -87,17 +93,34 @@ resource "google_container_node_pool" "main" {
     }
   }
 
+  dynamic "network_config" {
+    for_each = lookup(each.value, "enable_private_nodes", true) ? [each.value] : []
+    content {
+      enable_private_nodes = lookup(network_config.value, "enable_private_nodes", true)
+    }
+  }
+
   node_config {
-    preemptible     = lookup(each.value, "preemptible", false)
-    machine_type    = lookup(each.value, "machine_type", "e2-medium")
-    service_account = lookup(each.value, "service_account", google_service_account.nodes_sa[0].email)
-    disk_size_gb    = lookup(each.value, "disk_size_gb", 100)        # The smallest allowed disk size is 10GB
-    disk_type       = lookup(each.value, "disk_type", "pd-standard") # Supported pd-standard, pd-balanced or pd-ssd, default is pd-standard    
-    tags            = lookup(each.value, "tags", null) != null ? concat(split(",", lookup(each.value, "tags")), [local.network_tag]) : [local.network_tag]
+    preemptible  = lookup(each.value, "preemptible", false)
+    machine_type = lookup(each.value, "machine_type", "e2-medium")
+    service_account = lookup(each.value, "service_account", null) != null ? try(
+      data.google_service_account.lookup[each.value.service_account].email,
+      google_service_account.additional_service_accounts[each.value.service_account].email,
+    ) : local.default_sa_email
+    disk_size_gb = lookup(each.value, "disk_size_gb", 100)        # The smallest allowed disk size is 10GB
+    disk_type    = lookup(each.value, "disk_type", "pd-standard") # Supported pd-standard, pd-balanced or pd-ssd, default is pd-standard    
+    tags         = lookup(each.value, "tags", null) != null ? concat(split(",", lookup(each.value, "tags")), [local.network_tag]) : [local.network_tag]
+    labels       = lookup(var.node_pool_k8s_labels, each.value.name, null)
+
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
   }
+
+  depends_on = [
+    google_service_account.additional_service_accounts,
+    google_service_account.nodes_sa
+  ]
 }
 
 # TODO: Create GKE cluster
