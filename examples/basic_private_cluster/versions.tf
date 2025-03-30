@@ -7,7 +7,7 @@ terraform {
     }
   }
   backend "gcs" {
-    bucket = var.state_bucket_name
+    bucket = "tf-state-bucket-learn-gke-454605-f0"
     prefix = "terraform/state/basic_private_cluster"
   }
 }

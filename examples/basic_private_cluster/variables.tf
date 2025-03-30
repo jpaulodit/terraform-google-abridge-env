@@ -2,10 +2,6 @@ variable "project_id" {
   description = "The GCP project ID. Eg: learn-gke-454605-f0"
 }
 
-variable "state_bucket_name" {
-  description = "The name of the GCS bucket for storing Terraform state files. Eg: tf-state-bucket-learn-gke-454605"
-}
-
 variable "region" {
   description = "The GCP region for the cluster. If cluster is regional, specify the region."
 }
@@ -29,10 +25,6 @@ variable "subnet_pods_cidr" {
 variable "node_pools" {
   type        = list(map(any))
   description = "List of maps containing node pools configurations"
-}
-
-variable "enable_private_nodes" {
-  description = "Whether to enable private nodes"
 }
 
 variable "enable_private_cluster_access_internet" {
