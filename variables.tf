@@ -159,6 +159,12 @@ variable "enable_iap_ssh" {
   default     = false
 }
 
+variable "ssh_tag" {
+  description = "The tag to use for the SSH access to the nodes. Nodes with this tag will have SSH access rules applied to them."
+  type        = string
+  default     = "allow-ssh"
+}
+
 variable "enable_private_cluster_access_internet" {
   description = "Whether to enable private cluster to have internet access"
   type        = bool

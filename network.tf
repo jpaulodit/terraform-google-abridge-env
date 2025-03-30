@@ -68,7 +68,7 @@ resource "google_compute_firewall" "iap_ssh" {
   # Identity-Aware Proxy's IP range. This IP range is given by Google Cloud.
   source_ranges = ["35.235.240.0/20"]
 
-  target_tags = [local.network_tag]
+  target_tags = [var.ssh_tag]
 }
 
 # Configure Cloud Router which will be used to group NAT configuration information
