@@ -81,8 +81,7 @@ resource "google_container_node_pool" "main" {
   cluster  = google_container_cluster.main.name
   location = local.location
 
-  # Autoscaling is enabled by default.
-  node_count = lookup(each.value, "autoscaling", true) ? null : lookup(each.value, "node_count", 1)
+  node_locations = lookup(each.value, "node_locations", null) != null ? split(",", lookup(each.value, "node_locations")) : null
 
   dynamic "autoscaling" {
     for_each = lookup(each.value, "autoscaling", true) ? [each.value] : []
