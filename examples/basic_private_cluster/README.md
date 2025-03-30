@@ -4,7 +4,7 @@ This directory contains an example for a basic private cluster. The module creat
 - The subnet has a primary cidr range for the nodes, and 2 secondary ip ranges for the services and the pods.
 - A regional cluster in us-east1.
 - Cluster is set to enable private nodes, so all provisioned nodes are assigned only private IPs.
-- The control plane public endpoint access is enabled, and accessible from all IPs for demo purposes. Restrict this to your own IPs
+- The control plane public endpoint access is enabled, and accessible from all IPs (0.0.0.0/0) for demo purposes. Restrict this to your own IPs
 - A cloud router and cloud NAT are created to allow the nodes to access the internet.
 - A custom service account is created for the nodes.
 - A single node pool with autoscaling disabled. the node pool has 3 zones, and each zone has 2 nodes.
