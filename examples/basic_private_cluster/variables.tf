@@ -30,3 +30,11 @@ variable "node_pools" {
 variable "enable_private_cluster_access_internet" {
   description = "Whether to enable private cluster to have internet access"
 }
+
+variable "private_master_cidrs" {
+  type = list(object({
+    cidr_block   = string,
+    display_name = string
+  }))
+  description = "List of CIDRs from which access to the control plane is allowed. This kicks in when enable_private_endpoint is true. If none is provided, only access from the cluster node IPs is allowed."
+}

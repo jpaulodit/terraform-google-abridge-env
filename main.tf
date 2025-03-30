@@ -122,20 +122,3 @@ resource "google_container_node_pool" "main" {
     google_service_account.nodes_sa
   ]
 }
-
-# TODO: Create GKE cluster
-# TODO: Flag to enable/disable control plane endpoint
-# 3 types of subnets:
-# - Public
-# - Private
-# - Private with egress to the public internet
-
-# TODO: Create a NAT gateway
-# TODO: Create a firewall rule to allow traffic from the NAT gateway to the public internet
-# TODO: Create a firewall rule to allow traffic from the control plane to the public internet
-# TODO: Create a firewall rule to allow traffic from the control plane to the private network
-# TODO: Create a firewall rule to allow traffic from the private network to the control plane
-# TODO: Create a firewall rule to allow traffic from the private network to the public internet
-
-# TODO: Create a custom service account for the nodes in the GKE cluster
-

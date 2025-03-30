@@ -17,4 +17,10 @@ node_pools = [
   }
 ]
 
+private_master_cidrs = [
+  {
+    cidr_block   = "0.0.0.0/0"
+    display_name = "Allow all"
+  }
+]
 enable_private_cluster_access_internet = true
