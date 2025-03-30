@@ -23,7 +23,7 @@ module "single_zonal_cluster" {
   project_id           = var.project_id
   cluster_regional     = false
   region               = var.region
-  zones                = ["us-east1-b", "us-east1-c"]
+  zones                = ["us-east1-b"]
   subnet_primary_cidr  = "10.80.0.0/20"
   subnet_services_cidr = "10.80.16.0/20"
   subnet_pods_cidr     = "10.80.32.0/19"

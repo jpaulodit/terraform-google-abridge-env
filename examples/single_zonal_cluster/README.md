@@ -1,4 +1,22 @@
-# single_zonal_cluster
+This directory contains an example for a zonal private cluster. The module creates the following resources:
+
+- A VPC and a subnet in us-east1.
+- The subnet has a primary cidr range for the nodes, and 2 secondary ip ranges for the services and the pods.
+- A zonal cluster in us-east1-b.
+- Cluster is set to enable private nodes, so all provisioned nodes are assigned only private IPs.
+- The control plane public endpoint access is enabled, and accessible from all IPs (0.0.0.0/0) for demo purposes. Restrict this to your own IPs.
+- A cloud router and cloud NAT are created to allow the nodes to access the internet.
+- A custom service account is created for the nodes.
+- A single node pool with autoscaling disabled. The node pool by default has node location us-east1-b.
+
+The variables are assigned inside terraform.tfvars.
+
+To try out this example, run the following commands in this directory
+
+- `terraform init` - to initialize the working directory and download any modules, plugins, etc...
+- `terraform plan -out=tfplan` - to see the changes that will be made
+- `terraform apply tfplan` - to apply the changes
+- `terraform destroy` - to destroy and clean up the work
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
