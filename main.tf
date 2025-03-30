@@ -68,7 +68,7 @@ resource "google_container_cluster" "main" {
   resource_labels = var.cluster_resource_labels
 
   vertical_pod_autoscaling {
-    enabled = var.enable_pod_vertical_pod_autoscaler
+    enabled = var.enable_vertical_pod_autoscaler
   }
 
   # Disable deletion protection so we can delete the cluster after exercise

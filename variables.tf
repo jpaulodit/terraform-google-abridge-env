@@ -138,7 +138,7 @@ variable "enable_private_endpoint" {
   default     = false
 }
 
-variable "enable_pod_vertical_pod_autoscaler" {
+variable "enable_vertical_pod_autoscaler" {
   description = "Whether to enable pod vertical pod autoscaler in the cluster"
   type        = bool
   default     = false
