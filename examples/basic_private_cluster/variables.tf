@@ -1,17 +1,9 @@
 variable "project_id" {
-  description = "The GCP project ID"
-}
-
-variable "vpc_name" {
-  description = "The name of the VPC"
+  description = "The GCP project ID. Eg: learn-gke-454605-f0"
 }
 
 variable "region" {
   description = "The GCP region for the cluster. If cluster is regional, specify the region."
-}
-
-variable "zones" {
-  description = "The GCP zones for the cluster. If cluster is regional, specify the zones."
 }
 
 variable "cluster_regional" {
@@ -30,38 +22,11 @@ variable "subnet_pods_cidr" {
   description = "The pods CIDR block for the subnet. Eg: 10.80.32.0/19"
 }
 
-variable "cluster_name" {
-  description = "The name of the cluster"
-}
-
 variable "node_pools" {
   type        = list(map(any))
   description = "List of maps containing node pools configurations"
 }
 
-variable "node_pool_k8s_labels" {
-  type        = map(map(string))
-  description = "Key-value pairs to be added to the node pools"
-  default     = {}
-}
-
-variable "enable_private_nodes" {
-  description = "Whether to enable private nodes"
-}
-
-variable "enable_private_endpoint" {
-  description = "Whether to enable private endpoint"
-}
-
-variable "private_master_cidrs" {
-  type = list(object({
-    cidr_block   = string,
-    display_name = string
-  }))
-  description = "List of CIDRs from which access to the control plane is allowed."
-}
-
-variable "enable_private_cluster_internet" {
+variable "enable_private_cluster_access_internet" {
   description = "Whether to enable private cluster to have internet access"
 }
-
