@@ -1,4 +1,4 @@
-module "basic_public_cluster" {
+module "basic_private_cluster" {
   source = "../../"
 
   project_id                      = var.project_id
@@ -15,5 +15,16 @@ module "basic_public_cluster" {
   enable_private_endpoint         = var.enable_private_endpoint
   private_master_cidrs            = var.private_master_cidrs
   enable_private_cluster_internet = var.enable_private_cluster_internet
+  node_pool_k8s_labels            = var.node_pool_k8s_labels
   enable_iap_ssh                  = true
+  additional_service_accounts = [
+    {
+      name  = "private-node-pool-sa-2"
+      roles = []
+    },
+    {
+      name  = "private-node-pool-sa-3"
+      roles = []
+    }
+  ]
 }

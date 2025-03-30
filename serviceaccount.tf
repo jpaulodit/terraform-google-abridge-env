@@ -1,12 +1,7 @@
-resource "random_id" "nodes_sa_id" {
-  byte_length = 2
-}
-
 # Service account for GKE nodes with minimum required permissions
 resource "google_service_account" "nodes_sa" {
-  count        = var.create_nodes_service_account ? 1 : 0
   project      = var.project_id
-  account_id   = "${var.cluster_name}-nodes-sa-${random_id.nodes_sa_id.hex}"
+  account_id   = "${var.cluster_name}-nodes-sa"
   display_name = "GKE Nodes Service Account for ${var.cluster_name}"
   description  = "Service account used by GKE nodes for system operations"
 }
@@ -27,14 +22,14 @@ locals {
     "roles/serviceusage.serviceUsageConsumer"
   ]
 
-  node_sa_roles = var.create_nodes_service_account ? concat(local.default_node_sa_roles, var.additional_node_sa_roles) : []
+  node_sa_roles = concat(local.default_node_sa_roles, var.additional_node_sa_roles)
 }
 
 resource "google_project_iam_member" "node_sa_roles" {
   for_each = toset(local.node_sa_roles)
   project  = var.project_id
   role     = each.value
-  member   = google_service_account.nodes_sa[0].member
+  member   = google_service_account.nodes_sa.member
 }
 
 
@@ -42,7 +37,7 @@ resource "google_project_iam_member" "node_sa_roles" {
 resource "google_service_account" "additional_service_accounts" {
   for_each     = { for sa in var.additional_service_accounts : sa.name => sa }
   project      = var.project_id
-  account_id   = "${each.value.name}-${random_id.nodes_sa_id.hex}"
+  account_id   = each.value.name
   display_name = each.value.name
   description  = "Service account for ${each.value.name}"
 }

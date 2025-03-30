@@ -54,33 +54,33 @@ variable "cluster_regional" {
 }
 
 variable "region" {
-  description = "The GCP region for the cluster. If cluster is regional, specify the region."
+  description = "The GCP region for the cluster."
   type        = string
-  default     = "us-east1"
+  validation {
+    condition = contains([
+      "us-east1", "us-east4", "us-central1", "us-west1", "us-west2",
+      "europe-west1", "europe-west2", "europe-west3",
+      "asia-east1", "asia-east2", "asia-southeast1",
+      "southamerica-east1"
+    ], var.region)
+    error_message = "Invalid region defined. Please specify a valid GCP region."
+  }
 }
 
 variable "zones" {
   description = "The zones to host the cluster in. If you want a zonal cluster, specify a single zone."
   type        = list(string)
   default     = []
+  validation {
+    condition     = var.cluster_regional ? true : length(var.zones) > 0
+    error_message = "Zones must be specified for zonal clusters."
+  }
 }
 
 variable "cluster_name" {
   description = "The name of the cluster"
   type        = string
   default     = "default"
-}
-
-variable "autopilot" {
-  description = "Whether to enable autopilot for the cluster"
-  type        = bool
-  default     = false
-}
-
-variable "create_nodes_service_account" {
-  description = "Whether to create a service account for the nodes in the GKE cluster"
-  type        = bool
-  default     = true
 }
 
 variable "additional_node_sa_roles" {
@@ -113,12 +113,17 @@ variable "cluster_resource_labels" {
 variable "node_pools" {
   type        = list(map(any))
   description = "List of maps containing node pools configurations"
-
   default = [
     {
       name = "default-node-pool"
     },
   ]
+}
+
+variable "node_pool_k8s_labels" {
+  type        = map(map(string))
+  description = "Key-value pairs to be added to the node pools"
+  default     = {}
 }
 
 variable "enable_private_nodes" {
@@ -129,6 +134,12 @@ variable "enable_private_nodes" {
 
 variable "enable_private_endpoint" {
   description = "Whether to enable private endpoint"
+  type        = bool
+  default     = false
+}
+
+variable "enable_vertical_pod_autoscaler" {
+  description = "Whether to enable pod vertical pod autoscaler in the cluster"
   type        = bool
   default     = false
 }
@@ -148,7 +159,7 @@ variable "enable_iap_ssh" {
   default     = false
 }
 
-variable "enable_private_cluster_internet" {
+variable "enable_private_cluster_access_internet" {
   description = "Whether to enable private cluster to have internet access"
   type        = bool
   default     = false

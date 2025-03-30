@@ -1,5 +1,10 @@
+provider "google" {
+  region  = var.region
+  project = var.project_id
+}
+
 module "basic_public_cluster" {
-  source = "../../"
+  source = "git@github.com:jpaulodit/terraform-google-abridge-env.git"
 
   project_id           = var.project_id
   cluster_regional     = var.cluster_regional
