@@ -6,6 +6,7 @@ variable "project_id" {
 variable "vpc_name" {
   description = "The name of the VPC"
   type        = string
+  default     = "vpc-101"
 }
 
 variable "subnet_primary_cidr" {
@@ -80,7 +81,7 @@ variable "zones" {
 variable "cluster_name" {
   description = "The name of the cluster"
   type        = string
-  default     = "default"
+  default     = "cluster-101"
 }
 
 variable "additional_node_sa_roles" {
@@ -129,7 +130,7 @@ variable "node_pool_k8s_labels" {
 variable "enable_private_nodes" {
   description = "Whether to enable private nodes"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "enable_private_endpoint" {
@@ -168,5 +169,5 @@ variable "ssh_tag" {
 variable "enable_private_cluster_access_internet" {
   description = "Whether to enable private cluster to have internet access"
   type        = bool
-  default     = false
+  default     = true
 }
