@@ -1,12 +1,12 @@
-This directory contains an example for a basic private cluster. The module creates the following resources:
+This directory contains an example for a basic regional private cluster. The module creates the following resources:
 
 - A VPC and a subnet in us-east1.
 - The subnet has a primary cidr range for the nodes, and 2 secondary ip ranges for the services and the pods.
 - A regional cluster in us-east1.
 - Cluster is set to enable private nodes, so all provisioned nodes are assigned only private IPs.
-- The control plane public endpoint access is enabled, and accessible from all IPs (0.0.0.0/0) for demo purposes. Restrict this to your own IPs
+- The control plane public endpoint access is enabled, and accessible from all IPs (0.0.0.0/0) for demo purposes. Restrict this to your own IPs.
 - A cloud router and cloud NAT are created to allow the nodes to access the internet.
-- A custom service account is created for the nodes.
+- A custom service account is created for the nodes, and is assigned to the node pool.
 - A single node pool with autoscaling disabled. the node pool has 3 zones, and each zone has 2 nodes.
 
 The variables are assigned inside terraform.tfvars.
