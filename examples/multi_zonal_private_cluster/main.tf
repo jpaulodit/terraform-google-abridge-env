@@ -8,7 +8,7 @@ terraform {
   }
   backend "gcs" {
     bucket = "tf-state-bucket-abridge-hw"
-    prefix = "terraform/state/single_zonal_private_cluster"
+    prefix = "terraform/state/multi_zonal_private_cluster"
   }
 }
 

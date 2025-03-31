@@ -7,6 +7,8 @@ This directory contains an example for a basic regional public cluster. The modu
 - The control plane endpoint is accessible from the internet.
 - 1 node pool with autoscaling set to true with a minimum of 3 pods and a maximum of 9 pods. Every node gets a public and private IP address. 
 
+Prerequisite to this example are your own GCP project and Cloud Storage bucket. Update bucket name in main.tf as needed.
+
 Commands to run locally are
 
 - `terraform init` - to initialize the working directory and download any modules, plugins, etc...
