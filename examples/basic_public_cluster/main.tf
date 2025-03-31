@@ -7,7 +7,7 @@ terraform {
     }
   }
   backend "gcs" {
-    bucket = "tf-state-bucket-learn-gke-454605-f0"
+    bucket = "tf-state-bucket-abridge-hw"
     prefix = "terraform/state/basic_public_cluster"
   }
 }
