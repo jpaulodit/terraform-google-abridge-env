@@ -34,7 +34,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_single_zonal_cluster"></a> [single\_zonal\_cluster](#module\_single\_zonal\_cluster) | git@github.com:jpaulodit/terraform-google-abridge-env.git | n/a |
+| <a name="module_single_zonal_private_cluster"></a> [single\_zonal\_private\_cluster](#module\_single\_zonal\_private\_cluster) | git@github.com:jpaulodit/terraform-google-abridge-env.git | n/a |
 
 ## Resources
 

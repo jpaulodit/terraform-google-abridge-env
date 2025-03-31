@@ -8,7 +8,7 @@ terraform {
   }
   backend "gcs" {
     bucket = "tf-state-bucket-abridge-hw"
-    prefix = "terraform/state/single_zonal_cluster"
+    prefix = "terraform/state/single_zonal_private_cluster"
   }
 }
 
@@ -17,7 +17,7 @@ provider "google" {
   region  = var.region
 }
 
-module "single_zonal_cluster" {
+module "single_zonal_private_cluster" {
   source = "git@github.com:jpaulodit/terraform-google-abridge-env.git"
 
   project_id                             = var.project_id
