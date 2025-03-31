@@ -11,11 +11,12 @@ enable_private_nodes = false
 
 node_pools = [
   {
-    name           = "public-node-pool"
-    machine_type   = "e2-medium"
-    autoscaling    = true
-    min_node_count = 3
-    max_node_count = 9
-    tags           = "public-nodes-tag1,public-nodes-tag2"
+    name                 = "public-node-pool"
+    machine_type         = "e2-medium"
+    autoscaling          = true
+    min_node_count       = 3
+    max_node_count       = 9
+    tags                 = "public-nodes-tag1,public-nodes-tag2"
+    enable_private_nodes = false # Launch nodes with public IP addresses
   }
 ]
