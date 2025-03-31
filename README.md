@@ -7,6 +7,7 @@ There are more detailed examples inside the `examples/` directory.
 - [single_zonal_private_cluster](https://github.com/jpaulodit/terraform-google-abridge-env/tree/main/examples/single_zonal_private_cluster)
 - [multi_zonal_private_cluster](https://github.com/jpaulodit/terraform-google-abridge-env/tree/main/examples/multi_zonal_private_cluster)
 - [basic_public_cluster](https://github.com/jpaulodit/terraform-google-abridge-env/tree/main/examples/basic_public_cluster)
+- [multiple_service_accounts_and_subnets](https://github.com/jpaulodit/terraform-google-abridge-env/tree/main/examples/multiple_service_accounts_and_subnets)
 
 ## Basic Usage
 
