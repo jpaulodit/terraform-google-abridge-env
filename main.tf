@@ -83,6 +83,8 @@ resource "google_container_node_pool" "main" {
 
   node_locations = lookup(each.value, "node_locations", null) != null ? split(",", lookup(each.value, "node_locations")) : null
 
+  node_count = lookup(each.value, "autoscaling", true) ? null : lookup(each.value, "node_count", 1)
+
   dynamic "autoscaling" {
     for_each = lookup(each.value, "autoscaling", true) ? [each.value] : []
     content {
