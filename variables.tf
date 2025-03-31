@@ -123,7 +123,7 @@ variable "node_pools" {
 
 variable "node_pool_k8s_labels" {
   type        = map(map(string))
-  description = "Key-value pairs to be added to the node pools"
+  description = "Key-value pairs to be added to the node pools. These labels get added to the nodes and can be used for node affinity, node selectors, etc."
   default     = {}
 }
 

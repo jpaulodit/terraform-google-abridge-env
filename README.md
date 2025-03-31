@@ -1,14 +1,12 @@
 # This module provisions a GCP environment for running a GKE cluster.
 
-## Features
+## Examples
 
-
-At the bare minimum, it creates the following resources
-- a VPC
-- a subnet
-- a service account
-- a regional GKE cluster
-- a public node pool with autoscale enabled for the cluster
+There are more detailed examples inside the `examples/` directory.
+- [basic_private_cluster](https://github.com/jpaulodit/terraform-google-abridge-env/tree/main/examples/basic_private_cluster)
+- [single_zonal_private_cluster](https://github.com/jpaulodit/terraform-google-abridge-env/tree/main/examples/single_zonal_private_cluster)
+- [multi_zonal_private_cluster](https://github.com/jpaulodit/terraform-google-abridge-env/tree/main/examples/multi_zonal_private_cluster)
+- [basic_public_cluster](https://github.com/jpaulodit/terraform-google-abridge-env/tree/main/examples/basic_public_cluster)
 
 ## Basic Usage
 
@@ -24,21 +22,39 @@ terraform {
 }
 
 provider "google" {
-  project = "<PROJECT_ID>" # set this to your own project ID.
+  project = <ADD_YOUR_PROJECT_ID>
   region  = "us-east1"
 }
 
-module "gke" {
+module "basic_private_cluster" {
   source = "git@github.com:jpaulodit/terraform-google-abridge-env.git"
 
-  project_id           = "<PROJECT_ID>"
-  cluster_name         = "demo-cluster"
-  region               = "us-east1"
-  vpc_name             = "demo-vpc"
-  subnet_primary_cidr  = "10.80.0.0/20"
-  subnet_services_cidr = "10.80.16.0/20"
-  subnet_pods_cidr     = "10.80.32.0/19"
+  project_id                             = <ADD_YOUR_PROJECT_ID>
+  cluster_regional                       = true
+  region                                 = "us-east1"
+  subnet_primary_cidr                    = "10.80.0.0/20"
+  subnet_services_cidr                   = "10.80.16.0/20"
+  subnet_pods_cidr                       = "10.80.32.0/19"
+  enable_private_cluster_access_internet = true
+          
+  node_pools = [
+    {
+    name         = "private-node-pool"
+    machine_type = "e2-medium"
+    autoscaling  = false
+    node_count   = 2
+    tags         = "private-nodes"
+    }
+  ]
+          
+  private_master_cidrs = [
+    {
+    cidr_block   = "0.0.0.0/0"
+    display_name = "Allow all"
+    }
+  ]
 }
+
 ```
 
 ## Complete Options
@@ -107,13 +123,6 @@ module "gke" {
 }
 ```
 
-## Examples
-
-There are more detailed examples inside the `examples/` directory.
-- [basic_public_cluster](https://github.com/jpaulodit/terraform-google-abridge-env/tree/main/examples/basic_public_cluster)
-- [basic_private_cluster](https://github.com/jpaulodit/terraform-google-abridge-env/tree/main/examples/basic_private_cluster)
-- basic_private_cluster_with_multiple_node_pools
-
 ## Contributing
 
 This project uses [pre-commit](https://pre-commit.com/) for documentation and code formatting. 
@@ -178,7 +187,7 @@ No modules.
 | <a name="input_enable_private_endpoint"></a> [enable\_private\_endpoint](#input\_enable\_private\_endpoint) | Whether to enable private endpoint | `bool` | `false` | no |
 | <a name="input_enable_private_nodes"></a> [enable\_private\_nodes](#input\_enable\_private\_nodes) | Whether to enable private nodes | `bool` | `true` | no |
 | <a name="input_enable_vertical_pod_autoscaler"></a> [enable\_vertical\_pod\_autoscaler](#input\_enable\_vertical\_pod\_autoscaler) | Whether to enable pod vertical pod autoscaler in the cluster | `bool` | `false` | no |
-| <a name="input_node_pool_k8s_labels"></a> [node\_pool\_k8s\_labels](#input\_node\_pool\_k8s\_labels) | Key-value pairs to be added to the node pools | `map(map(string))` | `{}` | no |
+| <a name="input_node_pool_k8s_labels"></a> [node\_pool\_k8s\_labels](#input\_node\_pool\_k8s\_labels) | Key-value pairs to be added to the node pools. These labels get added to the nodes and can be used for node affinity, node selectors, etc. | `map(map(string))` | `{}` | no |
 | <a name="input_node_pools"></a> [node\_pools](#input\_node\_pools) | List of maps containing node pools configurations | `list(map(any))` | <pre>[<br/>  {<br/>    "name": "default-node-pool"<br/>  }<br/>]</pre> | no |
 | <a name="input_private_ip_google_access"></a> [private\_ip\_google\_access](#input\_private\_ip\_google\_access) | Whether to enable private IP Google access for the subnet | `bool` | `true` | no |
 | <a name="input_private_master_cidrs"></a> [private\_master\_cidrs](#input\_private\_master\_cidrs) | List of CIDRs from which access to the control plane is allowed. This kicks in when enable\_private\_endpoint is true. If none is provided, only access from the cluster node IPs is allowed. | <pre>list(object({<br/>    cidr_block   = string,<br/>    display_name = string<br/>  }))</pre> | `[]` | no |
