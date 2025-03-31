@@ -92,11 +92,8 @@ resource "google_container_node_pool" "main" {
     }
   }
 
-  dynamic "network_config" {
-    for_each = lookup(each.value, "enable_private_nodes", true) ? [each.value] : []
-    content {
-      enable_private_nodes = lookup(network_config.value, "enable_private_nodes", true)
-    }
+  network_config {
+    enable_private_nodes = lookup(each.value, "enable_private_nodes", true)
   }
 
   node_config {
