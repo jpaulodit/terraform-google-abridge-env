@@ -1,7 +1,4 @@
-project_id = "learn-gke-454605-f0"
-
 # Networking
-vpc_name             = "public-cluster"
 region               = "us-east1"
 subnet_primary_cidr  = "10.80.0.0/20"
 subnet_services_cidr = "10.80.16.0/20"
@@ -9,13 +6,16 @@ subnet_pods_cidr     = "10.80.32.0/19"
 
 # Cluster configuration
 cluster_regional = true
-cluster_name     = "public-cluster"
+
+enable_private_nodes = false
+
 node_pools = [
   {
-    name         = "public-node-pool"
-    machine_type = "e2-medium"
-    node_count   = 1
-    autoscaling  = false
-    tags         = "tag-1,tag-2"
+    name           = "public-node-pool"
+    machine_type   = "e2-medium"
+    autoscaling    = true
+    min_node_count = 3
+    max_node_count = 9
+    tags           = "public-nodes-tag1,public-nodes-tag2"
   }
 ]

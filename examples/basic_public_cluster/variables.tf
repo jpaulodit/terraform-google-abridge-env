@@ -1,13 +1,11 @@
 variable "project_id" {
-  description = "The GCP project ID"
-}
-
-variable "vpc_name" {
-  description = "The name of the VPC"
+  description = "The GCP project ID. Eg: learn-gke-454605-f0"
+  type        = string
 }
 
 variable "region" {
   description = "The GCP region for the cluster. If cluster is regional, specify the region."
+  type        = string
 }
 
 variable "cluster_regional" {
@@ -26,11 +24,11 @@ variable "subnet_pods_cidr" {
   description = "The pods CIDR block for the subnet. Eg: 10.80.32.0/19"
 }
 
-variable "cluster_name" {
-  description = "The name of the cluster"
-}
-
 variable "node_pools" {
   type        = list(map(any))
   description = "List of maps containing node pools configurations"
+}
+
+variable "enable_private_nodes" {
+  description = "Whether to enable private nodes"
 }
