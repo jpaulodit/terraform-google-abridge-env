@@ -101,6 +101,9 @@ resource "google_container_node_pool" "main" {
   node_config {
     preemptible  = lookup(each.value, "preemptible", false)
     machine_type = lookup(each.value, "machine_type", "e2-medium")
+
+    # Allows assigning a service account created outside of this module to the node pool or reference one
+    # that was created by this module. If not provided, the default service account that this module created is used.
     service_account = lookup(each.value, "service_account", null) != null ? try(
       data.google_service_account.lookup[each.value.service_account].email,
       google_service_account.additional_service_accounts[each.value.service_account].email,
