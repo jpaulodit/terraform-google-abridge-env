@@ -70,7 +70,7 @@ module "gke" {
   subnet_primary_cidr  = "10.80.0.0/20"
   subnet_services_cidr = "10.80.16.0/20"
   subnet_pods_cidr     = "10.80.32.0/19"
-  zones                = ["us-east1-a", "us-east1-b", "us-east1-c"]
+  zones                = ["us-east1-b", "us-east1-c", "us-east1-d"]
   
   additional_main_subnet_cidrs = [
     {
@@ -89,15 +89,21 @@ module "gke" {
   additional_service_accounts = [
     {
       name = "extra-service-account-1"
-      roles = ["roles/storage.admin"]
+      roles = ["roles/container.defaultNodeServiceAccount"]
     }
   ]
   
   cluster_name         = "demo-cluster"
+  cluster_regional     = true
   cluster_resource_labels = {
-    owner = "team-A"
+    owner = "team-infrastructure"
   }
-
+  
+  enable_private_nodes = true
+  enable_private_endpoint = true
+  enable_vertical_pod_autoscaler = true
+  enable_private_cluster_access_internet = true
+  
   node_pools = [
     {
       name = "flex-node-pool"
@@ -116,10 +122,16 @@ module "gke" {
       name = "static-node-pool"
       autoscaling = false
       node_count  = 2
+      service_account = "extra-service-account-1"
     }
   ]
 
-  node_pool_labels =
+  node_pool_k8s_labels = {
+    flex-node-pool = {
+      label1 = "value1"
+      label2 = "value2"
+    }
+  }
 }
 ```
 
