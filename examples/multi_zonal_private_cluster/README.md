@@ -1,4 +1,4 @@
-This directory contains an example for a zonal private cluster. The module creates the following resources:
+This directory contains an example for a multi-zonal private cluster. The module creates the following resources:
 
 - A VPC and a subnet in us-east1.
 - The subnet has a primary cidr range for the nodes, and 2 secondary ip ranges for the services and the pods.
@@ -7,7 +7,11 @@ This directory contains an example for a zonal private cluster. The module creat
 - The control plane public endpoint access is enabled, and accessible from all IPs (0.0.0.0/0) for demo purposes. Restrict this to your own IPs.
 - A cloud router and cloud NAT are created to allow the nodes to access the internet.
 - A custom service account is created for the nodes, and is assigned to the node pool.
-- A single node pool with autoscaling disabled. The node pool by default has node location us-east1-b.
+- 3 node pools are created, each with different configurations
+  - pool A has auto scaling with disk type and size overrides. also has additional k8s node labels.
+  - pool B has auto scaling with machine type and auto scaling location policy overrides
+  - pool C has a fixed size with node location overrides. also has additional k8s node labels.
+
 
 The variables are assigned inside terraform.tfvars.
 
@@ -34,7 +38,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_single_zonal_cluster"></a> [single\_zonal\_cluster](#module\_single\_zonal\_cluster) | git@github.com:jpaulodit/terraform-google-abridge-env.git | n/a |
+| <a name="module_multi_zonal_private_cluster"></a> [multi\_zonal\_private\_cluster](#module\_multi\_zonal\_private\_cluster) | git@github.com:jpaulodit/terraform-google-abridge-env.git | n/a |
 
 ## Resources
 
@@ -46,6 +50,7 @@ No resources.
 |------|-------------|------|---------|:--------:|
 | <a name="input_cluster_regional"></a> [cluster\_regional](#input\_cluster\_regional) | Whether the cluster is regional or zonal. If regional, specify the region. | `any` | n/a | yes |
 | <a name="input_enable_private_cluster_access_internet"></a> [enable\_private\_cluster\_access\_internet](#input\_enable\_private\_cluster\_access\_internet) | Whether to enable private cluster to have internet access | `bool` | n/a | yes |
+| <a name="input_node_pool_k8s_labels"></a> [node\_pool\_k8s\_labels](#input\_node\_pool\_k8s\_labels) | Key-value pairs to be added to the node pools. These labels get added to the nodes and can be used for node affinity, node selectors, etc. | `map(map(string))` | `{}` | no |
 | <a name="input_node_pools"></a> [node\_pools](#input\_node\_pools) | List of maps containing node pools configurations | `list(map(any))` | n/a | yes |
 | <a name="input_private_master_cidrs"></a> [private\_master\_cidrs](#input\_private\_master\_cidrs) | List of CIDRs from which access to the control plane is allowed | <pre>list(object({<br/>    cidr_block   = string<br/>    display_name = string<br/>  }))</pre> | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The GCP project ID. Eg: abridge-hw | `string` | n/a | yes |
