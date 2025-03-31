@@ -11,6 +11,9 @@ This directory contains an example for a basic regional private cluster. The mod
 
 The variables are assigned inside terraform.tfvars.
 
+
+Prerequisite to this example are your own GCP project and Cloud Storage bucket. Update bucket name in main.tf as needed.
+
 To try out this example, run the following commands in this directory
 
 - `terraform init` - to initialize the working directory and download any modules, plugins, etc...

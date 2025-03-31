@@ -19,7 +19,6 @@ provider "google" {
 
 module "gke" {
   source = "git@github.com:jpaulodit/terraform-google-abridge-env.git"
-  # source = "../.."
 
   project_id           = var.project_id
   region               = var.region

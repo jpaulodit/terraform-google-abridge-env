@@ -3,6 +3,8 @@ For extra subnets use the `additional_subnets` variable.
 For extra service accounts, use the `additional_service_accounts` variable. Also, you can attached the service account to the node pool by using the `service_account` field in the `node_pools` variable.
 Refer to main.tf file for the full details.
 
+Prerequisite to this example are your own GCP project and Cloud Storage bucket. Update bucket name in main.tf as needed.
+
 To try out this example, run the following commands in this directory
 
 - `terraform init` - to initialize the working directory and download any modules, plugins, etc...
