@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-hello-app-deployment
+  namespace: demo
+spec:
+  selector:
+    matchLabels:
+      app: hello-app
+  template:
+    metadata:
+      labels:
+        app: hello-app
+    spec:
+      containers:
+      - image: us-docker.pkg.dev/google-samples/containers/gke/hello-app:2.0
+        name: hello-app-container
+        ports:
+        - containerPort: 8080
+          name: hello-app-svc
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+          readOnlyRootFilesystem: false
+          capabilities:
+            add: []
+            drop: ["NET_RAW"]
+          runAsUser: 1000
+        livenessProbe:
+          httpGet:
+            path: /
+            port: hello-app-svc
+            httpHeaders:
+            - name: X-Custom-Header
+              value: Awesome
+          initialDelaySeconds: 3
+          periodSeconds: 3
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      tolerations:
+      - effect: NoSchedule
+        key: kubernetes.io/arch
+        operator: Equal
+        value: amd64
