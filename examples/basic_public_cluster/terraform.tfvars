@@ -20,3 +20,5 @@ node_pools = [
     enable_private_nodes = false # Launch nodes with public IP addresses
   }
 ]
+
+enable_private_cluster_access_internet = false

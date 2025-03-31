@@ -30,5 +30,5 @@ module "basic_public_cluster" {
   subnet_pods_cidr                       = var.subnet_pods_cidr
   enable_private_nodes                   = var.enable_private_nodes
   node_pools                             = var.node_pools
-  enable_private_cluster_access_internet = false
+  enable_private_cluster_access_internet = var.enable_private_cluster_access_internet
 }

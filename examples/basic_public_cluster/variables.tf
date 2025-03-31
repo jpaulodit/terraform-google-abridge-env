@@ -32,3 +32,7 @@ variable "node_pools" {
 variable "enable_private_nodes" {
   description = "Whether to enable private nodes"
 }
+
+variable "enable_private_cluster_access_internet" {
+  description = "Whether to enable private cluster access to the internet"
+}

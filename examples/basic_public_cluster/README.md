@@ -4,7 +4,7 @@ This directory contains an example for a basic regional public cluster. The modu
 - The subnet has a primary cidr range for the nodes, and 2 secondary ip ranges for the services and the pods.
 - 1 regional GKE cluster in us-east1 across in 3 zones.
 - 1 custom service account is created for the nodes.
-- The control plane endpoint is not private.
+- The control plane endpoint is accessible from the internet.
 - 1 node pool with autoscaling set to true with a minimum of 3 pods and a maximum of 9 pods. Every node gets a public and private IP address. 
 
 Commands to run locally are
@@ -13,53 +13,6 @@ Commands to run locally are
 - `terraform plan -out=tfplan` - to see the changes that will be made
 - `terraform apply tfplan` - to apply the changes
 - `terraform destroy` - to destroy and clean up the work
-
-## Example Usage
-
-```hcl
-terraform {
-  required_version = ">= 1.0.0"
-  required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = "~> 6.0"
-    }
-  }
-}
-
-provider "google" {
-  project = "learn-gke-454605-f0" # set this to your own project ID.
-  region  = "us-east1"
-}
-
-module "public-cluster" {
-    source = "git@github.com:jpaulodit/terraform-google-abridge-env.git"
-
-    project_id = "learn-gke-454605-f0"  # Set this to your own project ID
-
-    # Networking
-    vpc_name             = "public-cluster"
-    region               = "us-east1"
-    subnet_primary_cidr  = "10.80.0.0/20"
-    subnet_services_cidr = "10.80.16.0/20"
-    subnet_pods_cidr     = "10.80.32.0/19"
-
-    # Cluster configuration
-    cluster_regional = true
-    cluster_name     = "public-cluster"
-    node_pools = [
-      {
-        name         = "public-node-pool"
-        machine_type = "e2-medium"
-        node_count   = 1
-        autoscaling  = false
-        tags         = "tag-1,tag-2"
-      }
-    ]
-}
-```
-
-
 
 
 <!-- BEGIN_TF_DOCS -->
@@ -89,6 +42,7 @@ No resources.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_cluster_regional"></a> [cluster\_regional](#input\_cluster\_regional) | Whether the cluster is regional or zonal. If regional, specify the region. | `any` | n/a | yes |
+| <a name="input_enable_private_cluster_access_internet"></a> [enable\_private\_cluster\_access\_internet](#input\_enable\_private\_cluster\_access\_internet) | Whether to enable private cluster access to the internet | `any` | n/a | yes |
 | <a name="input_enable_private_nodes"></a> [enable\_private\_nodes](#input\_enable\_private\_nodes) | Whether to enable private nodes | `any` | n/a | yes |
 | <a name="input_node_pools"></a> [node\_pools](#input\_node\_pools) | List of maps containing node pools configurations | `list(map(any))` | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The GCP project ID. Eg: learn-gke-454605-f0 | `string` | n/a | yes |
