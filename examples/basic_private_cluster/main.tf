@@ -18,7 +18,8 @@ provider "google" {
 }
 
 module "basic_private_cluster" {
-  source = "git@github.com:jpaulodit/terraform-google-abridge-env.git"
+  # source = "git@github.com:jpaulodit/terraform-google-abridge-env.git"
+  source = "git::https://github.com/jpaulodit/terraform-google-abridge-env.git"
 
   project_id                             = var.project_id
   cluster_regional                       = var.cluster_regional
