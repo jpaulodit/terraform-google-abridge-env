@@ -18,7 +18,8 @@ provider "google" {
 }
 
 module "basic_public_cluster" {
-  source = "git@github.com:jpaulodit/terraform-google-abridge-env.git"
+  # source = "git@github.com:jpaulodit/terraform-google-abridge-env.git"
+  source = "git::https://github.com/jpaulodit/terraform-google-abridge-env.git"
 
   cluster_name                           = "basic-public-cluster"
   vpc_name                               = "basic-public-cluster-vpc"

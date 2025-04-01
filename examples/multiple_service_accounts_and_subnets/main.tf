@@ -18,8 +18,9 @@ provider "google" {
 }
 
 module "gke" {
-  source = "git@github.com:jpaulodit/terraform-google-abridge-env.git"
-
+  # source = "git@github.com:jpaulodit/terraform-google-abridge-env.git"
+  source = "git::https://github.com/jpaulodit/terraform-google-abridge-env.git"
+  
   project_id           = var.project_id
   region               = var.region
   subnet_primary_cidr  = "10.80.0.0/20"

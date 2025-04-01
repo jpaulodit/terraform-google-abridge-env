@@ -18,8 +18,9 @@ provider "google" {
 }
 
 module "single_zonal_private_cluster" {
-  source = "git@github.com:jpaulodit/terraform-google-abridge-env.git"
-
+  # source = "git@github.com:jpaulodit/terraform-google-abridge-env.git"
+  source = "git::https://github.com/jpaulodit/terraform-google-abridge-env.git"
+  
   project_id                             = var.project_id
   cluster_regional                       = var.cluster_regional
   region                                 = var.region
